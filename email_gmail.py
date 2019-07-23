@@ -1,6 +1,8 @@
-import smtplib, getpass
+import smtplib, getpass, os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email.encoders import encoder_base64
 
 print( "*** Enviar email con GMAIL ***" )
 user = input( "Cuenta de Gmail: " )
@@ -11,6 +13,7 @@ remitente = input( "From, Ejemplo: admin <admin@correo.com>:" )
 destinatario = input( "To, ejemplo: amigo <amigo@correo.com>:" )
 asunto = input( "Subject, Asunto del mensaje: " )
 mensaje = input( "Mensaje HTML: " )
+archivo = input( "Adjuntar Archivo: " )
 
 #Host y puerto SMTP de Gmail
 gmail = smtplib( 'smtp.gmail.com', 587 )
@@ -31,6 +34,9 @@ header['To'] = destinatario
 
 mensaje = MIMEText( mensaje, 'HTML' )
 header.attach( mensaje )
+
+if( os.path.isfile( archivo ) ):
+    adjunto = MIMEBase( 'application', '' )
 
 #Enviar email
 gmail.sendmail( remitente, destinatario, header.as_string() )
